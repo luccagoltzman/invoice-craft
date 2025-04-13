@@ -16,7 +16,7 @@ const Header = () => {
         
         <div className="flex items-center space-x-4">
           <a 
-            href="https://github.com/luccagoltzman/invoice-craft" 
+            href="https://github.com/luccagoltzman" 
             target="_blank" 
             rel="noopener noreferrer"
             className="hover:opacity-75 transition-all"
