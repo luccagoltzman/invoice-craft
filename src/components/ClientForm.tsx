@@ -129,6 +129,15 @@ const ClientForm = ({ onSubmitData, defaultValues }: ClientFormProps) => {
               {...register('notes')}
             />
           </div>
+
+          <div className="mt-4">
+            <button 
+              type="submit" 
+              className="btn btn-primary"
+            >
+              Atualizar Informações
+            </button>
+          </div>
         </div>
       </form>
     </div>

@@ -164,6 +164,16 @@ const ServicesForm = ({ onSubmitData, defaultValues }: ServicesFormProps) => {
                 </td>
                 <td></td>
               </tr>
+              <tr>
+                <td colSpan={5} className="px-2 py-4">
+                  <button
+                    type="submit"
+                    className="btn btn-primary float-right"
+                  >
+                    Atualizar Serviços
+                  </button>
+                </td>
+              </tr>
             </tfoot>
           </table>
         </div>
