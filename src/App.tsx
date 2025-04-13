@@ -2,9 +2,7 @@ import InvoiceBuilder from './pages/InvoiceBuilder';
 import './App.css';
 
 function App() {
-  return (
-    <InvoiceBuilder />
-  );
+  return <InvoiceBuilder />;
 }
 
 export default App;

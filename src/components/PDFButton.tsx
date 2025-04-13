@@ -35,20 +35,21 @@ const PDFButton = ({ clientData, services, isDataComplete }: PDFButtonProps) => 
     <button
       onClick={handleGeneratePDF}
       disabled={!isDataComplete || isGenerating}
-      className={`btn flex items-center justify-center space-x-2 w-full md:w-auto ${
+      className={`btn btn-lg btn-accent btn-icon ${
         isDataComplete && !isGenerating
-          ? 'btn-primary'
-          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          ? 'shadow'
+          : 'disabled cursor-not-allowed'
       }`}
+      title={!isDataComplete ? "Preencha todos os campos obrigatórios" : "Baixar PDF da fatura"}
     >
       {isGenerating ? (
         <>
-          <FaSpinner className="w-4 h-4 animate-spin" />
+          <FaSpinner className="w-4 h-4 mr-2 animate-spin" />
           <span>Gerando PDF...</span>
         </>
       ) : (
         <>
-          <FaFilePdf className="w-4 h-4" />
+          <FaFilePdf className="w-4 h-4 mr-2" />
           <span>Baixar PDF</span>
         </>
       )}

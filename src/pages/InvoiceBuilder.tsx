@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import Header from '../components/Header';
 import ClientForm, { ClientFormData } from '../components/ClientForm';
 import ServicesForm, { ServiceItem } from '../components/ServicesForm';
 import InvoicePreview from '../components/InvoicePreview';
 import PDFButton from '../components/PDFButton';
+import Layout from '../components/Layout';
+import { FaUserEdit, FaList, FaEye, FaArrowDown } from 'react-icons/fa';
 
 const InvoiceBuilder = () => {
   const [clientData, setClientData] = useState<ClientFormData>({
@@ -45,30 +46,43 @@ const InvoiceBuilder = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header />
-      
-      <main className="flex-grow container mx-auto px-4 py-8">
+    <Layout>
+      <div className="container py-8">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold mb-4">Gerador de Faturas</h1>
+          <p className="text-neutral-600 max-w-2xl mx-auto">
+            Crie faturas profissionais em segundos. Preencha os dados, visualize em tempo real e baixe como PDF.
+          </p>
+        </div>
+        
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Coluna de Formulários */}
           <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Gerador de Faturas</h1>
+            <div className="card">
+              <div className="flex items-center mb-4">
+                <FaUserEdit className="text-primary mr-2 h-6 w-6" />
+                <h2 className="text-xl font-semibold">Dados do Cliente</h2>
+              </div>
+              
+              <ClientForm 
+                onSubmitData={handleClientDataSubmit} 
+                defaultValues={clientData} 
+              />
+            </div>
             
-            <p className="text-gray-600 mb-8">
-              Preencha os dados abaixo para gerar uma fatura profissional. Todos os campos marcados são obrigatórios.
-            </p>
+            <div className="card">
+              <div className="flex items-center mb-4">
+                <FaList className="text-primary mr-2 h-6 w-6" />
+                <h2 className="text-xl font-semibold">Serviços Prestados</h2>
+              </div>
+              
+              <ServicesForm 
+                onSubmitData={handleServicesSubmit} 
+                defaultValues={services} 
+              />
+            </div>
             
-            <ClientForm 
-              onSubmitData={handleClientDataSubmit} 
-              defaultValues={clientData} 
-            />
-            
-            <ServicesForm 
-              onSubmitData={handleServicesSubmit} 
-              defaultValues={services} 
-            />
-            
-            <div className="mt-8 flex justify-end">
+            <div className="flex justify-end mt-8 print-hidden">
               <PDFButton 
                 clientData={clientData} 
                 services={services} 
@@ -78,21 +92,32 @@ const InvoiceBuilder = () => {
           </div>
           
           {/* Coluna de Visualização */}
-          <div className="lg:sticky lg:top-6 self-start">
-            <InvoicePreview 
-              clientData={clientData} 
-              services={services} 
-            />
+          <div className="lg:sticky lg:top-6 self-start print-hidden">
+            <div className="card">
+              <div className="flex items-center mb-4">
+                <FaEye className="text-primary mr-2 h-6 w-6" />
+                <h2 className="text-xl font-semibold">Visualização</h2>
+              </div>
+              
+              <p className="text-neutral-600 mb-4">
+                Esta é a aparência da sua fatura. As alterações são refletidas em tempo real.
+              </p>
+              
+              <div className="flex justify-center mb-6">
+                <div className="p-2 rounded-full bg-neutral-100 text-neutral-500 animate-bounce">
+                  <FaArrowDown />
+                </div>
+              </div>
+              
+              <InvoicePreview 
+                clientData={clientData} 
+                services={services} 
+              />
+            </div>
           </div>
         </div>
-      </main>
-      
-      <footer className="bg-white border-t py-6">
-        <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
-          <p>InvoiceCraft - Um gerador de faturas simples para freelancers e pequenos negócios</p>
-        </div>
-      </footer>
-    </div>
+      </div>
+    </Layout>
   );
 };
 
