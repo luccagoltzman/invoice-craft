@@ -1,30 +1,62 @@
-import { FaGithub, FaFileInvoice } from 'react-icons/fa';
+import { FaGithub, FaFileInvoice, FaInfoCircle } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const Header = () => {
   return (
-    <header>
-      <div className="container flex justify-between items-center">
-        <div className="flex items-center">
-          <div className="mr-2">
-            <FaFileInvoice className="h-6 w-6" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">InvoiceCraft</h1>
-            <p className="opacity-75">Gerador de Faturas Profissionais</p>
-          </div>
-        </div>
-        
-        <div className="flex items-center space-x-4">
-          <a 
-            href="https://github.com/luccagoltzman" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:opacity-75 transition-all"
-            title="Ver código no GitHub"
+    <header className="app-header">
+      <div className="container">
+        <nav className="nav-container">
+          <motion.div 
+            className="brand"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            <FaGithub className="w-6 h-6" />
-          </a>
-        </div>
+            <motion.div 
+              className="logo-wrapper"
+              whileHover={{ rotate: 5, scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
+              <FaFileInvoice className="logo-icon" />
+            </motion.div>
+            
+            <div className="brand-text">
+              <h1 className="brand-name">InvoiceCraft</h1>
+              <p className="brand-tagline">Gerador de Faturas Profissionais</p>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="nav-actions"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.a 
+              href="#" 
+              className="nav-link"
+              title="Sobre o InvoiceCraft"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaInfoCircle />
+              <span className="nav-link-text">Sobre</span>
+            </motion.a>
+            
+            <motion.a 
+              href="https://github.com/luccagoltzman" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="nav-link"
+              title="Ver código no GitHub"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaGithub />
+              <span className="nav-link-text">GitHub</span>
+            </motion.a>
+          </motion.div>
+        </nav>
       </div>
     </header>
   );
