@@ -40,3 +40,43 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Estilos específicos para impressão */
+@media print {
+  body {
+    background-color: white !important;
+  }
+  
+  header, 
+  footer, 
+  .print-hidden,
+  button {
+    display: none !important;
+  }
+  
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .invoice-preview {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Animações */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
