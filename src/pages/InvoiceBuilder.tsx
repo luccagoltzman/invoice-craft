@@ -14,7 +14,11 @@ const InvoiceBuilder = () => {
     clientAddress: '',
     invoiceNumber: `INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
     invoiceDate: new Date().toISOString().split('T')[0],
+    dueDate: '',
+    documentType: 'invoice',
+    companyLogo: null,
     notes: '',
+    respectNoteColor: '#1a1a1a',
   });
 
   const [services, setServices] = useState<ServiceItem[]>([
@@ -41,7 +45,10 @@ const InvoiceBuilder = () => {
   }, [tips.length]);
 
   const handleClientDataSubmit = (data: ClientFormData) => {
+    console.log('🟡 InvoiceBuilder - handleClientDataSubmit - dados recebidos:', data);
+    console.log('🟡 InvoiceBuilder - respectNoteColor:', data.respectNoteColor);
     setClientData(data);
+    console.log('🟡 InvoiceBuilder - clientData atualizado:', data);
   };
 
   const handleServicesSubmit = (data: ServiceItem[]) => {

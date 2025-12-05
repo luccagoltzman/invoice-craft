@@ -7,6 +7,9 @@ interface InvoicePreviewProps {
 }
 
 const InvoicePreview = ({ clientData, services }: InvoicePreviewProps) => {
+  console.log('🟢 InvoicePreview - clientData recebido:', clientData);
+  console.log('🟢 InvoicePreview - respectNoteColor:', clientData.respectNoteColor);
+  
   const calculateSubtotal = (item: ServiceItem) => {
     return item.quantity * item.unitPrice;
   };
@@ -28,83 +31,359 @@ const InvoicePreview = ({ clientData, services }: InvoicePreviewProps) => {
     return date.toLocaleDateString('pt-BR');
   };
 
-  return (
-    <div className="card invoice-preview print:shadow-none">
-      <h2 className="text-xl font-semibold mb-6 print-hidden">Pré-visualização da Fatura</h2>
+  const getDocumentTypeLabel = () => {
+    switch (clientData.documentType) {
+      case 'invoice':
+        return 'Fatura';
+      case 'subscription':
+        return 'Mensalidade';
+      case 'service-order':
+        return 'Ordem de Serviço';
+      default:
+        return 'Fatura';
+    }
+  };
 
-      <div className="p-4 border rounded-lg">
-        {/* Cabeçalho */}
-        <div className="invoice-header">
-          <div>
-            <h2 className="invoice-title">FATURA</h2>
-            <p className="invoice-number">#{clientData.invoiceNumber}</p>
+  return (
+    <div style={{ 
+      background: '#ffffff',
+      padding: '0',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      color: '#1a1a1a',
+      maxWidth: '210mm',
+      margin: '0 auto',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+    }}>
+      {/* Header com logo e informações principais */}
+      <div style={{
+        background: clientData.respectNoteColor 
+          ? `linear-gradient(135deg, ${clientData.respectNoteColor} 0%, ${clientData.respectNoteColor}dd 100%)`
+          : 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+        color: '#ffffff',
+        padding: '3rem 2.5rem',
+        position: 'relative'
+      }}>
+        {clientData.companyLogo && (
+          <div style={{ marginBottom: '2rem' }}>
+            <img 
+              src={clientData.companyLogo} 
+              alt="Logo" 
+              style={{ 
+                maxHeight: '50px', 
+                maxWidth: '180px', 
+                objectFit: 'contain',
+                filter: 'brightness(0) invert(1)'
+              }}
+            />
           </div>
-          <div className="invoice-meta">
-            <p className="invoice-meta-label">Data de Emissão</p>
-            <p className="invoice-meta-value">{formatDate(clientData.invoiceDate)}</p>
+        )}
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <div style={{ 
+              fontSize: '0.75rem',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              opacity: 0.8,
+              marginBottom: '0.5rem'
+            }}>
+              {getDocumentTypeLabel()}
+            </div>
+            <div style={{ 
+              fontSize: '2.5rem',
+              fontWeight: 300,
+              letterSpacing: '-0.02em',
+              marginBottom: '0.25rem'
+            }}>
+              {clientData.invoiceNumber}
+            </div>
+          </div>
+          
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ 
+                fontSize: '0.75rem',
+                opacity: 0.7,
+                marginBottom: '0.25rem'
+              }}>
+                Emissão
+              </div>
+              <div style={{ 
+                fontSize: '1rem',
+                fontWeight: 500
+              }}>
+                {formatDate(clientData.invoiceDate)}
+              </div>
+            </div>
+            {clientData.dueDate && (
+              <div>
+                <div style={{ 
+                  fontSize: '0.75rem',
+                  opacity: 0.7,
+                  marginBottom: '0.25rem'
+                }}>
+                  Vencimento
+                </div>
+                <div style={{ 
+                  fontSize: '1rem',
+                  fontWeight: 500
+                }}>
+                  {formatDate(clientData.dueDate)}
+                </div>
+              </div>
+            )}
           </div>
         </div>
+      </div>
 
+      {/* Conteúdo principal */}
+      <div style={{ padding: '2.5rem' }}>
         {/* Informações do Cliente */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-2 text-neutral-800">Cliente</h3>
-          <div className="invoice-section invoice-section-client p-4">
-            <p className="font-bold">{clientData.clientName}</p>
-            <p>{clientData.clientEmail}</p>
-            <p className="whitespace-pre-line">{clientData.clientAddress}</p>
+        <div style={{ marginBottom: '3rem' }}>
+          <div style={{
+            fontSize: '0.6875rem',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: '#6b7280',
+            marginBottom: '1rem',
+            fontWeight: 600
+          }}>
+            Cliente
+          </div>
+          <div style={{
+            borderLeft: '3px solid #1a1a1a',
+            paddingLeft: '1.25rem',
+            paddingTop: '0.5rem',
+            paddingBottom: '0.5rem'
+          }}>
+            <div style={{ 
+              fontSize: '1.125rem',
+              fontWeight: 600,
+              marginBottom: '0.5rem',
+              color: '#1a1a1a'
+            }}>
+              {clientData.clientName}
+            </div>
+            <div style={{ 
+              fontSize: '0.9375rem',
+              color: '#6b7280',
+              marginBottom: '0.25rem'
+            }}>
+              {clientData.clientEmail}
+            </div>
+            <div style={{ 
+              fontSize: '0.9375rem',
+              color: '#6b7280',
+              whiteSpace: 'pre-line',
+              lineHeight: '1.6'
+            }}>
+              {clientData.clientAddress}
+            </div>
           </div>
         </div>
 
         {/* Tabela de Serviços */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-2 text-neutral-800">Serviços</h3>
-          <div className="table-responsive">
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="text-left">Descrição</th>
-                  <th className="text-center">Qtd</th>
-                  <th className="text-right">Valor Unit.</th>
-                  <th className="text-right">Subtotal</th>
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{
+            fontSize: '0.6875rem',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: '#6b7280',
+            marginBottom: '1rem',
+            fontWeight: 600
+          }}>
+            Itens
+          </div>
+          
+          <table style={{ 
+            width: '100%',
+            borderCollapse: 'collapse',
+            borderSpacing: 0
+          }}>
+            <thead>
+              <tr style={{
+                borderBottom: '2px solid #e5e7eb'
+              }}>
+                <th style={{
+                  textAlign: 'left',
+                  padding: '0.875rem 0',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  color: '#6b7280',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase'
+                }}>
+                  Descrição
+                </th>
+                <th style={{
+                  textAlign: 'center',
+                  padding: '0.875rem 0',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  color: '#6b7280',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  width: '10%'
+                }}>
+                  Qtd
+                </th>
+                <th style={{
+                  textAlign: 'right',
+                  padding: '0.875rem 0',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  color: '#6b7280',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  width: '20%'
+                }}>
+                  Unitário
+                </th>
+                <th style={{
+                  textAlign: 'right',
+                  padding: '0.875rem 0',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  color: '#6b7280',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  width: '20%'
+                }}>
+                  Total
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {services.map((service, index) => (
+                <tr 
+                  key={index}
+                  style={{
+                    borderBottom: index < services.length - 1 ? '1px solid #f3f4f6' : 'none'
+                  }}
+                >
+                  <td style={{
+                    padding: '1rem 0',
+                    fontSize: '0.9375rem',
+                    color: '#1a1a1a'
+                  }}>
+                    {service.description}
+                  </td>
+                  <td style={{
+                    padding: '1rem 0',
+                    fontSize: '0.9375rem',
+                    color: '#1a1a1a',
+                    textAlign: 'center'
+                  }}>
+                    {service.quantity}
+                  </td>
+                  <td style={{
+                    padding: '1rem 0',
+                    fontSize: '0.9375rem',
+                    color: '#6b7280',
+                    textAlign: 'right'
+                  }}>
+                    {formatCurrency(service.unitPrice)}
+                  </td>
+                  <td style={{
+                    padding: '1rem 0',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    color: '#1a1a1a',
+                    textAlign: 'right'
+                  }}>
+                    {formatCurrency(calculateSubtotal(service))}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {services.map((service, index) => (
-                  <tr key={index}>
-                    <td className="font-medium">{service.description}</td>
-                    <td className="text-center">{service.quantity}</td>
-                    <td className="text-right">{formatCurrency(service.unitPrice)}</td>
-                    <td className="text-right font-medium">{formatCurrency(calculateSubtotal(service))}</td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colSpan={3} className="text-right p-4 font-bold">Total:</td>
-                  <td className="text-right p-4 font-bold bg-primary-light bg-opacity-10">{formatCurrency(calculateTotal())}</td>
-                </tr>
-              </tfoot>
-            </table>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Total */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '2rem',
+          marginBottom: '2rem'
+        }}>
+          <div style={{
+            width: '300px',
+            borderTop: '2px solid #1a1a1a',
+            paddingTop: '1rem'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '0.5rem'
+            }}>
+              <span style={{
+                fontSize: '0.875rem',
+                color: '#6b7280',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                fontWeight: 600
+              }}>
+                Total
+              </span>
+              <span style={{
+                fontSize: '1.5rem',
+                fontWeight: 300,
+                color: '#1a1a1a',
+                letterSpacing: '-0.02em'
+              }}>
+                {formatCurrency(calculateTotal())}
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Observações */}
         {clientData.notes && (
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-2 text-neutral-800">Observações</h3>
-            <div className="p-4 bg-neutral-50 border rounded whitespace-pre-line">
+          <div style={{
+            marginTop: '3rem',
+            paddingTop: '2rem',
+            borderTop: '1px solid #e5e7eb'
+          }}>
+            <div style={{
+              fontSize: '0.6875rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: '#6b7280',
+              marginBottom: '0.75rem',
+              fontWeight: 600
+            }}>
+              Observações
+            </div>
+            <div style={{
+              fontSize: '0.9375rem',
+              color: '#4b5563',
+              lineHeight: '1.7',
+              whiteSpace: 'pre-line'
+            }}>
               {clientData.notes}
             </div>
           </div>
         )}
 
-        {/* Rodapé */}
-        <div className="text-center text-sm text-neutral-500 mt-12 pt-4 border-t">
-          <p>Gerado por InvoiceCraft • Um gerador de faturas simples e elegante</p>
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        background: '#f9fafb',
+        padding: '1.5rem 2.5rem',
+        borderTop: '1px solid #e5e7eb',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          fontSize: '0.75rem',
+          color: '#9ca3af'
+        }}>
+          Gerado por InvoiceCraft
         </div>
       </div>
     </div>
   );
 };
 
-export default InvoicePreview; 
+export default InvoicePreview;

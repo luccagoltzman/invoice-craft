@@ -66,7 +66,7 @@ const ServicesForm = ({ onSubmitData, defaultValues }: ServicesFormProps) => {
                     />
                   </div>
                   {errors.services?.[index]?.description && (
-                    <p className="mt-1 text-xs text-danger">
+                    <p className="mt-1 text-xs text-danger" style={{ marginTop: '0.5rem' }}>
                       {errors.services[index]?.description?.message}
                     </p>
                   )}
@@ -86,7 +86,7 @@ const ServicesForm = ({ onSubmitData, defaultValues }: ServicesFormProps) => {
                     />
                   </div>
                   {errors.services?.[index]?.quantity && (
-                    <p className="mt-1 text-xs text-danger">
+                    <p className="mt-1 text-xs text-danger" style={{ marginTop: '0.5rem' }}>
                       {errors.services[index]?.quantity?.message}
                     </p>
                   )}
@@ -108,13 +108,17 @@ const ServicesForm = ({ onSubmitData, defaultValues }: ServicesFormProps) => {
                     />
                   </div>
                   {errors.services?.[index]?.unitPrice && (
-                    <p className="mt-1 text-xs text-danger">
+                    <p className="mt-1 text-xs text-danger" style={{ marginTop: '0.5rem' }}>
                       {errors.services[index]?.unitPrice?.message}
                     </p>
                   )}
                 </td>
                 <td className="py-3 w-32">
-                  <div className="form-input bg-neutral-50 text-right font-medium">
+                  <div className="form-input bg-neutral-50 text-right font-medium" style={{ 
+                    backgroundColor: 'var(--neutral-50)',
+                    border: '1.5px solid var(--neutral-200)',
+                    cursor: 'default'
+                  }}>
                     {calculateSubtotal(services[index]).toLocaleString('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
@@ -126,11 +130,14 @@ const ServicesForm = ({ onSubmitData, defaultValues }: ServicesFormProps) => {
                     type="button"
                     onClick={() => remove(index)}
                     disabled={fields.length === 1}
-                    className={`p-2 rounded-full ${
+                    className={`p-2 rounded-full transition-colors ${
                       fields.length === 1
                         ? 'text-neutral-400 cursor-not-allowed'
-                        : 'text-danger hover:bg-danger hover:bg-opacity-10'
+                        : 'text-danger hover:bg-danger-subtle'
                     }`}
+                    style={fields.length === 1 ? {} : { 
+                      transition: 'var(--transition-base)'
+                    }}
                     title="Remover item"
                   >
                     <FaTrash className="w-4 h-4" />
@@ -145,7 +152,11 @@ const ServicesForm = ({ onSubmitData, defaultValues }: ServicesFormProps) => {
                 <button
                   type="button"
                   onClick={() => append({ description: '', quantity: 1, unitPrice: 0 })}
-                  className="btn btn-sm btn-secondary btn-icon"
+                  className="btn btn-sm btn-icon"
+                  style={{
+                    backgroundColor: 'var(--neutral-200)',
+                    color: 'var(--neutral-800)'
+                  }}
                 >
                   <FaPlus className="w-3 h-3 mr-1" />
                   Adicionar Serviço
@@ -156,7 +167,10 @@ const ServicesForm = ({ onSubmitData, defaultValues }: ServicesFormProps) => {
               <td colSpan={3} className="py-4 text-right font-bold">
                 Total:
               </td>
-              <td className="py-4 font-bold text-right bg-primary bg-opacity-5 rounded">
+              <td className="py-4 font-bold text-right rounded" style={{
+                backgroundColor: 'var(--primary-subtle)',
+                padding: '1rem'
+              }}>
                 {calculateTotal().toLocaleString('pt-BR', {
                   style: 'currency',
                   currency: 'BRL',

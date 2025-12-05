@@ -13,22 +13,19 @@ interface PDFButtonProps {
 const PDFButton = ({ clientData, services, isDataComplete }: PDFButtonProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
   
-  const handleGeneratePDF = () => {
+  const handleGeneratePDF = async () => {
     if (!isDataComplete) return;
     
     setIsGenerating(true);
     
-    // Pequeno delay para mostrar o spinner e permitir que a UI atualize
-    setTimeout(() => {
-      try {
-        generatePDF(clientData, services);
-      } catch (error) {
-        console.error('Erro ao gerar PDF:', error);
-        alert('Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.');
-      } finally {
-        setIsGenerating(false);
-      }
-    }, 500);
+    try {
+      await generatePDF(clientData, services);
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+      alert('Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
   
   return (
